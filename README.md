@@ -1,3 +1,5 @@
-# ManaKos Development
+# ManaKos
 
-## https://github.com/ManaKos/ManaKos-Development
+### Management Kos
+#### under development
+
