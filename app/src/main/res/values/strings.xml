@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">ManaKos</string>
+    <string name="hint_personName">Nama Pengguna</string>
+    <string name="hint_password">Kata Sandi</string>
+    <string name="bnt_back">←</string>
+    <string name="open">Buka</string>
+    <string name="close">Tutup</string>
+    <string name="edit_text_full_name">Nama Lengkap</string>
+    <string name="edit_text_date_of_registration">Tanggal Masuk</string>
+    <string name="edit_text_number_of_family_members">Jumlah Penghuni</string>
+    <string name="edit_text_phone_number">Nomor Telepon</string>
+    <string name="email">Email</string>
+    <string name="edit_text_flat_number">Nomor Kos</string>
+    <string name="edit_text_personal_account">Token Listrik</string>
+    <string name="edit_text_total_area">Luas Total</string>
+    <string name="edit_text_usable_area">Luas Yang Dapat Digunakan</string>
+    <string name="edit_text_entrance_number">Nomor Pintu Masuk</string>
+    <string name="edit_text_number_rooms">Jumlah Ruangan</string>
+    <string name="edit_text_residents">Jumlah Penghuni Terdaftar</string>
+    <string name="edit_text_owners">Jumlah Pemilik</string>
+    <string name="manakos">ManaKos</string>
+    <string name="navbar">navbar</string>
+    <string-array name="typesCounter">
+        <item>Penghitung Air Dingin</item>
+        <item>Penghitung Air Panas</item>
+        <item>Penghitung Energi Listrik</item>
+        <item>Penghitung Gas</item>
+        <item>Penghitung Pemanas</item>
+    </string-array>
+    <string-array name="typesCounterFilter">
+        <item></item>
+        <item>Penghitung Air Dingin</item>
+        <item>Penghitung Air Panas</item>
+        <item>Penghitung Energi Listrik</item>
+        <item>Penghitung Gas</item>
+        <item>Penghitung Pemanas</item>
+    </string-array>
+    <string-array name="typesCounterUsed">
+        <item></item>
+        <item>Ya</item>
+        <item>Tidak</item>
+    </string-array>
+    <string-array name="services">
+        <item></item>
+        <item>Air Dingin</item>
+        <item>Air Panas</item>
+        <item>Gas</item>
+        <item>Energi Listrik</item>
+        <item>Energi Panas</item>
+    </string-array>
+</resources>

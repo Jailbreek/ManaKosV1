@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeItem"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Home"
+        />
+    <item
+        android:id="@+id/tenantsItem"
+        android:icon="@drawable/tenants"
+        android:title="Penyewa"
+        />
+    <item
+        android:id="@+id/flatsItem"
+        android:icon="@drawable/flat"
+        android:title="Kos"
+        />
+    <item
+        android:id="@+id/сountersItem"
+        android:icon="@drawable/meter"
+        android:title="Penghitung"
+        />
+    <item
+        android:id="@+id/indicationsItem"
+        android:icon="@drawable/indications"
+        android:title="Data"
+        />
+    <item
+        android:id="@+id/ratesItem"
+        android:icon="@drawable/calculate"
+        android:title="Tarif dan peraturan"
+        />
+    <item
+        android:id="@+id/paymentsItem"
+        android:icon="@drawable/money"
+        android:title="Transaksi"
+        />
+    <item
+        android:id="@+id/accountItem"
+        android:icon="@drawable/account"
+        android:title="Akun"
+        android:fontFamily="@font/urbanbold"
+        />
+</menu>
