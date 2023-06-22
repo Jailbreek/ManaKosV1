@@ -60,7 +60,7 @@ class IndicationsActivity : AppCompatActivity() {
             toggle.syncState()
             settings = getSharedPreferences("my_storage", Context.MODE_PRIVATE)
 
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
             navView.setNavigationItemSelectedListener {
                 when(it.itemId){
@@ -100,7 +100,7 @@ class IndicationsActivity : AppCompatActivity() {
                 true
             }
         }
-        binding.recycleViewIndications.layoutManager = LinearLayoutManager(this@IndicationsActivity)
+        binding.recycleViewIndications.setLayoutManager(LinearLayoutManager(this@IndicationsActivity));
         databaseRequests =  DatabaseRequests(this@IndicationsActivity)
         checkUser()
         binding.addIndication.setOnClickListener(View.OnClickListener {addIndication()})
@@ -118,9 +118,9 @@ class IndicationsActivity : AppCompatActivity() {
             val selectedItem = parent.getItemAtPosition(position) as String
             binding.serchViewPeriod.setQuery(selectedItem, true)
         }
-        binding.filters.visibility = View.GONE
+        binding.filters.visibility = View.GONE;
         binding.filterOpen.setOnClickListener(View.OnClickListener {
-            binding.filters.visibility = View.VISIBLE
+            binding.filters.visibility = View.VISIBLE;
         })
         binding.serchViewFlat.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -166,8 +166,8 @@ class IndicationsActivity : AppCompatActivity() {
 
     private fun resetData() {
         adapter = IndicationViewAdapter(indications,this@IndicationsActivity, this)
-        binding.recycleViewIndications.adapter = adapter
-        binding.filters.visibility = View.GONE
+        binding.recycleViewIndications.setAdapter(adapter)
+        binding.filters.visibility = View.GONE;
         binding.serchViewFlat.setQuery("", true)
         binding.serchViewPeriod.setQuery("", true)
         binding.spinnerType.setSelection(0)
@@ -177,7 +177,7 @@ class IndicationsActivity : AppCompatActivity() {
         var id_flat = ""
         val countersType: ArrayList<Counter>
         var newIndications = ArrayList<Indication>()
-        val type = types[types.indexOfFirst { it == binding.spinnerType.selectedItem }]
+        val type = types[types.indexOfFirst {  it.equals(binding.spinnerType.selectedItem)}]
         if(type != "")
         {
             countersType = databaseRequests.selectCountersFromType(type)
@@ -206,7 +206,7 @@ class IndicationsActivity : AppCompatActivity() {
             newIndicationsFilter = newIndications.filter { it.period.contains(binding.serchViewPeriod.query) } as ArrayList<Indication>
         }
         adapter = IndicationViewAdapter(newIndicationsFilter,this@IndicationsActivity, this)
-        binding.recycleViewIndications.adapter = adapter
+        binding.recycleViewIndications.setAdapter(adapter)
         binding.filters.visibility = View.GONE
     }
 
@@ -229,7 +229,7 @@ class IndicationsActivity : AppCompatActivity() {
             }
         }
         val adapter = IndicationViewAdapter(indications, this, this)
-        binding.recycleViewIndications.adapter = adapter
+        binding.recycleViewIndications.setAdapter(adapter)
 
         flats = databaseRequests.selectNumberFlats()
         periods = databaseRequests.selectPeriodsFromIndication()

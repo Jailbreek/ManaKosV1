@@ -58,7 +58,7 @@ class CountersActivity : AppCompatActivity() {
             drawer.addDrawerListener(toggle)
             toggle.syncState()
 
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
             navView.setNavigationItemSelectedListener {
                 when(it.itemId){
@@ -99,7 +99,7 @@ class CountersActivity : AppCompatActivity() {
             }
         }
 
-        binding.recycleViewCounters.layoutManager = LinearLayoutManager(this@CountersActivity)
+        binding.recycleViewCounters.setLayoutManager(LinearLayoutManager(this@CountersActivity));
         databaseRequests =  DatabaseRequests(this@CountersActivity)
         checkUser()
         flatsAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, flats)
@@ -111,7 +111,7 @@ class CountersActivity : AppCompatActivity() {
         binding.addCounter.setOnClickListener(View.OnClickListener {addCounter()})
         binding.filters.visibility = View.GONE
         binding.filterOpen.setOnClickListener(View.OnClickListener {
-            binding.filters.visibility = View.VISIBLE
+            binding.filters.visibility = View.VISIBLE;
         })
         binding.serchViewFlat.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -136,7 +136,7 @@ class CountersActivity : AppCompatActivity() {
 
     private fun resetData() {
         adapter = CounterViewAdapter(counters,this@CountersActivity, this)
-        binding.recycleViewCounters.adapter = adapter
+        binding.recycleViewCounters.setAdapter(adapter)
         binding.filters.visibility = View.GONE
 
         binding.serchViewFlat.setQuery("", true)
@@ -146,11 +146,11 @@ class CountersActivity : AppCompatActivity() {
 
     private fun filterData() {
         val used: String
-        if(usedArr[usedArr.indexOfFirst { it == binding.spinnerUsed.selectedItem }] == "Ya") used = "true"
-        else if(usedArr[usedArr.indexOfFirst { it == binding.spinnerUsed.selectedItem }] == "Tidak") used = "false"
+        if(usedArr.get(usedArr.indexOfFirst { it.equals(binding.spinnerUsed.selectedItem) }) == "Ya") used = "true"
+        else if(usedArr.get(usedArr.indexOfFirst { it.equals(binding.spinnerUsed.selectedItem) }) == "Tidak") used = "false"
         else used = ""
         var id_flat = ""
-        val type = types[types.indexOfFirst {  it == (binding.spinnerType.selectedItem)}]
+        val type = types[types.indexOfFirst {  it.equals(binding.spinnerType.selectedItem)}]
         var newCounters = ArrayList<Counter>()
         for(counter: Counter in counters)
         {
@@ -167,8 +167,8 @@ class CountersActivity : AppCompatActivity() {
             newCounters = newCounters.filter { it.used.toString().contains(used) } as ArrayList<Counter>
         }
         adapter = CounterViewAdapter(newCounters,this@CountersActivity, this)
-        binding.recycleViewCounters.adapter = adapter
-        binding.filters.visibility = View.GONE
+        binding.recycleViewCounters.setAdapter(adapter)
+        binding.filters.visibility = View.GONE;
     }
 
     private fun addCounter() {
@@ -185,7 +185,7 @@ class CountersActivity : AppCompatActivity() {
             }
         }
         adapter = CounterViewAdapter(counters, this, this)
-        binding.recycleViewCounters.adapter = adapter
+        binding.recycleViewCounters.setAdapter(adapter)
 
         flats = databaseRequests.selectNumberFlats()
     }

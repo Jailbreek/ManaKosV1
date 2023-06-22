@@ -1,5 +1,7 @@
 package com.example.manakos.models;
 
+import java.time.LocalDate;
+
 public class Counter {
     private Integer id;
     private String type;

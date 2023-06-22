@@ -6,8 +6,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.manakos.activites.Counter.ListCountersActivity
+import com.example.manakos.activites.Indication.IndicationItemActivity
+import com.example.manakos.activites.Indication.IndicationsActivity
 import com.example.manakos.database.DatabaseRequests
+import com.example.manakos.databinding.ActivityWorkIndicationBinding
 import com.example.manakos.databinding.ActivityWorkRateOrNormativeBinding
+import com.example.manakos.models.Indication
 import com.example.manakos.models.Normative
 import com.example.manakos.models.Rate
 
@@ -15,8 +20,7 @@ class WorkRateOrNormativeActivity : AppCompatActivity() {
     lateinit var binding: ActivityWorkRateOrNormativeBinding
     lateinit var rate: Rate
     lateinit var normative: Normative
-    private lateinit var databaseRequests: DatabaseRequests
-
+    private lateinit var databaseRequests: DatabaseRequests;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWorkRateOrNormativeBinding.inflate(layoutInflater)
@@ -25,13 +29,12 @@ class WorkRateOrNormativeActivity : AppCompatActivity() {
         fillData(intent.getIntExtra("id_rate", 0), intent.getIntExtra("id_normative", 0))
 
         binding.buttonBack.setOnClickListener(View.OnClickListener {
-            transition()
-        })
-        binding.buttonWork.setOnClickListener(View.OnClickListener { work() })
-    }
+            transition()})
+            binding.buttonWork.setOnClickListener(View.OnClickListener { work() })
+        }
 
     private fun work() {
-        if (rate.id != 0 && rate.id != null) {
+        if(rate.id != 0 && rate.id != null){
             try {
                 rate.value = binding.editTextValue.text.toString().toFloat()
             } catch (_: Exception) {
@@ -39,28 +42,31 @@ class WorkRateOrNormativeActivity : AppCompatActivity() {
 
             var error: String? = null
 
-            if (binding.editTextValue.text.toString().isEmpty()) error = "value"
+            if(binding.editTextValue.text.toString().isEmpty()) error = "value"
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
             builder.setTitle("Error")
             builder.setNegativeButton(
-                "Ok",
-                DialogInterface.OnClickListener { dialog, _ ->
+                "OK",
+                DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
                 })
 
-            if (error == null) {
+            if(error == null)
+            {
                 databaseRequests.updateRate(rate)
                 transition()
-            } else {
-                when (error) {
+            }
+            else{
+                when(error){
                     "value" ->
                         builder.setMessage("Error input pada nilai: jumlah karakter dalam string harus setidaknya 1.")
                 }
                 builder.show()
             }
-        } else {
+        }
+        else{
             try {
                 normative.value = binding.editTextValue.text.toString().toFloat()
             } catch (_: Exception) {
@@ -68,22 +74,24 @@ class WorkRateOrNormativeActivity : AppCompatActivity() {
 
             var error: String? = null
 
-            if (binding.editTextValue.text.toString().isEmpty()) error = "value"
+            if(binding.editTextValue.text.toString().isEmpty()) error = "value"
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
             builder.setTitle("Error")
             builder.setNegativeButton(
-                "Ok",
-                DialogInterface.OnClickListener { dialog, _ ->
+                "OK",
+                DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
                 })
 
-            if (error == null) {
+            if(error == null)
+            {
                 databaseRequests.updateNormative(normative)
                 transition()
-            } else {
-                when (error) {
+            }
+            else{
+                when(error){
                     "value" ->
                         builder.setMessage("Error input pada nilai: jumlah karakter dalam string harus setidaknya 1.")
                 }
@@ -93,13 +101,14 @@ class WorkRateOrNormativeActivity : AppCompatActivity() {
     }
 
     private fun fillData(id_rate: Int, id_normative: Int) {
-        if (id_rate != 0) {
+        if(id_rate != 0){
             rate = databaseRequests.selectRateFromId(id_rate)
 
             binding.textView.text = "Tarif"
             binding.editTextName.setText(rate.name)
             binding.editTextValue.setText(rate.value.toString())
-        } else {
+        }
+        else{
             rate = Rate()
             normative = databaseRequests.selectNormativeFromId(id_normative)
 
@@ -116,3 +125,4 @@ class WorkRateOrNormativeActivity : AppCompatActivity() {
         startActivity(i)
     }
 }
+

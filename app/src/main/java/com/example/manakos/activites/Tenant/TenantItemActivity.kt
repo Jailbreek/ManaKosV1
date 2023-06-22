@@ -36,7 +36,7 @@ class TenantItemActivity : AppCompatActivity() {
         settings = getSharedPreferences("my_storage", Context.MODE_PRIVATE)
         databaseRequests =  DatabaseRequests(this@TenantItemActivity)
 
-        binding.recycleViewFlats.layoutManager = LinearLayoutManager(this@TenantItemActivity)
+        binding.recycleViewFlats.setLayoutManager(LinearLayoutManager(this@TenantItemActivity));
         fillData(intent.getIntExtra("id", 0))
         binding.update.setOnClickListener(View.OnClickListener {
             updateTenant()
@@ -119,7 +119,7 @@ class TenantItemActivity : AppCompatActivity() {
                     dialog.dismiss()
                 })
             builder.setMessage("Tidak dapat menghapus penyewa karena terkait dengan beberapa unit apartemen!")
-            builder.show()
+            builder.show();
         }
     }
 

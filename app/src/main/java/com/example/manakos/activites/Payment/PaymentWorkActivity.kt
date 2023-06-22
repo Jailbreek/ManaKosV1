@@ -47,7 +47,7 @@ class PaymentWorkActivity : AppCompatActivity() {
                 i.putExtra("id", intent.getIntExtra("id", 0))
                 startActivity(i)})
         binding.buttonWork.setOnClickListener(View.OnClickListener { workPayment() })
-        binding.buttonLoadCheque.setOnClickListener(View.OnClickListener { loadCheque() })
+        binding.buttonLoadCheque.setOnClickListener(View.OnClickListener { loadCheck() })
         checkUser()
     }
 
@@ -60,7 +60,7 @@ class PaymentWorkActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadCheque() {
+    private fun loadCheck() {
         val PICK_IMAGE = 1
 
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -69,7 +69,7 @@ class PaymentWorkActivity : AppCompatActivity() {
 
     private fun workPayment() {
         payment.status = binding.checkStatus.isChecked
-        if(selectedImage != Uri.EMPTY){
+        if(!selectedImage.equals(Uri.EMPTY)){
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImage)
             writeImage(bitmap)
         }
@@ -92,9 +92,9 @@ class PaymentWorkActivity : AppCompatActivity() {
         }
     }
 
-    private fun readImage(fileName: String): Bitmap?{
-        return try {
-            val dir = File("$path/Cek In/")
+    fun readImage(fileName: String): Bitmap?{
+        try {
+            val dir = File("$path/IngChecks/")
 
             val readFrom = File(dir, fileName)
             val content = ByteArray(readFrom.length().toInt())
@@ -103,15 +103,16 @@ class PaymentWorkActivity : AppCompatActivity() {
             stream.read(content)
 
             val bitmap = BitmapFactory.decodeByteArray(content, 0, content.size)
-            bitmap
-        } catch (exp: Exception){
-            null
+            return bitmap
+        }
+        catch (exp: Exception){
+            return null
         }
     }
 
-    private fun writeImage(bitmap: Bitmap): Boolean{
+    fun writeImage(bitmap: Bitmap): Boolean{
         return try {
-            val dir = File("$path/Cek In/")
+            val dir = File("$path/IngChecks/")
             if(!dir.exists()){
                 dir.mkdirs()
             }
@@ -126,7 +127,7 @@ class PaymentWorkActivity : AppCompatActivity() {
             writer.write(imageArrByte)
             writer.close()
 
-            Toast.makeText(this, "berhasil", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "успешно", Toast.LENGTH_SHORT).show()
             payment.cheque = fileName
             true
         } catch (exp: Exception) {

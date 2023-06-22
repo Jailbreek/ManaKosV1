@@ -49,8 +49,8 @@ class MenuActivity : AppCompatActivity() {
             databaseRequests =  DatabaseRequests(this@MenuActivity)
             settings = getSharedPreferences("my_storage", Context.MODE_PRIVATE)
 
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            window.setFlags(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE, WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true);
+            getWindow().setFlags(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE, WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
 
             navView.setNavigationItemSelectedListener {
                 when (it.itemId) {
@@ -140,18 +140,19 @@ class MenuActivity : AppCompatActivity() {
                 .setContentIntent(pendingIntent)
                 .setContentTitle("Administrasi")
                 .setContentText("Anda memiliki tagihan yang belum dibayar!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
             val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             createChannelIfNeeded(notificationManager)
             notificationManager.notify(1, compat.build())
         }
     }
 
-    private fun createChannelIfNeeded(manager : NotificationManager){
+    fun createChannelIfNeeded(manager : NotificationManager){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel =
                 NotificationChannel("CHANNEL_ID", "CHANNEL_ID", NotificationManager.IMPORTANCE_DEFAULT)
             manager.createNotificationChannel(notificationChannel)
         }
     }
+
 }

@@ -9,9 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.manakos.activites.Flat.WorkFlatActivity
+import com.example.manakos.activites.Tenant.TenantsActivity
 import com.example.manakos.database.DatabaseRequests
 import com.example.manakos.databinding.ActivityCounterItemBinding
+import com.example.manakos.databinding.ActivityTenantItemBinding
 import com.example.manakos.models.Counter
+import com.example.manakos.models.Flat
+import com.example.manakos.models.Tenant
+import com.google.gson.Gson
 
 class CounterItemActivity : AppCompatActivity() {
     lateinit var binding: ActivityCounterItemBinding
@@ -58,12 +65,12 @@ class CounterItemActivity : AppCompatActivity() {
         {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
-            builder.setTitle("Menghapus penghitung")
-            builder.setMessage("Anda yakin ingin menghapus penghitung ini?")
+            builder.setTitle("Hapus penghitung")
+            builder.setMessage("Apakah Anda yakin ingin menghapus penghitung ini?")
 
             builder.setPositiveButton(
                 "Ya",
-                DialogInterface.OnClickListener { dialog, _ ->
+                DialogInterface.OnClickListener { dialog, which ->
                     val cursor = databaseRequests.deleteCounter(counter.id)
                     if (cursor == -1)  Toast.makeText(this@CounterItemActivity, "Gagal menghapus!", Toast.LENGTH_SHORT).show()
                     else {
@@ -76,7 +83,7 @@ class CounterItemActivity : AppCompatActivity() {
 
             builder.setNegativeButton(
                 "Tidak",
-                DialogInterface.OnClickListener { dialog, _ ->
+                DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
                 })
 
@@ -89,11 +96,11 @@ class CounterItemActivity : AppCompatActivity() {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setTitle("Error")
             builder.setNegativeButton(
-                "Оk",
-                DialogInterface.OnClickListener { dialog, _ ->
+                "OK",
+                DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
                 })
-            builder.setMessage("Gagal hapus karena dipakai")
+            builder.setMessage("Gagal hapus karena masih dipakai!")
             builder.show()
         }
     }

@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.manakos.database.DatabaseRequests
 import com.example.manakos.databinding.ActivityFlatItemBinding
@@ -26,7 +28,7 @@ class FlatItemActivity : AppCompatActivity() {
     var role = ""
     lateinit var settings: SharedPreferences
 
-    private lateinit var databaseRequests: DatabaseRequests
+    private lateinit var databaseRequests: DatabaseRequests;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +37,7 @@ class FlatItemActivity : AppCompatActivity() {
         settings = getSharedPreferences("my_storage", Context.MODE_PRIVATE)
         databaseRequests =  DatabaseRequests(this@FlatItemActivity)
         fillData(intent.getIntExtra("id", 0))
-        if (flat.id_tenant != null) binding.recycleViewTenants.layoutManager = LinearLayoutManager(this@FlatItemActivity)
+        if (flat.id_tenant != null) binding.recycleViewTenants.setLayoutManager(LinearLayoutManager(this@FlatItemActivity));
         binding.update.setOnClickListener(View.OnClickListener { updateFlat() })
         binding.delete.setOnClickListener(View.OnClickListener { deleteFlat() })
         chelUser()
@@ -52,19 +54,19 @@ class FlatItemActivity : AppCompatActivity() {
     private fun fillData(id: Int) {
         flat = databaseRequests.selectFlatFromId(id)
 
-        binding.txtVwNumberFlat.text = flat.flat_number
-        binding.txtVwPersonalAccount.text = flat.personal_account
-        binding.txtVwTotalArea.text = flat.total_area.toString()
-        binding.txtVwUsableArea.text = flat.usable_area.toString()
-        binding.txtVwEntranceNumber.text = flat.entrance_number
-        binding.txtVwNumberOfRooms.text = flat.number_of_rooms
-        binding.txtVwNumberOfResidents.text = flat.number_of_registered_residents.toString()
-        binding.txtVwNumberOfOwners.text = flat.number_of_owners.toString()
+        binding.txtVwNumberFlat.setText(flat.flat_number)
+        binding.txtVwPersonalAccount.setText(flat.personal_account)
+        binding.txtVwTotalArea.setText(flat.total_area.toString())
+        binding.txtVwUsableArea.setText(flat.usable_area.toString())
+        binding.txtVwEntranceNumber.setText(flat.entrance_number)
+        binding.txtVwNumberOfRooms.setText(flat.number_of_rooms)
+        binding.txtVwNumberOfResidents.setText(flat.number_of_registered_residents.toString())
+        binding.txtVwNumberOfOwners.setText(flat.number_of_owners.toString())
 
         if(flat.id_tenant != 0 && flat.id_tenant != null){
             tenants.add(databaseRequests.selectTenantsFromId(flat.id_tenant))
             val adapter = TenantViewAdapter(tenants, this, this)
-            binding.recycleViewTenants.adapter = adapter
+            binding.recycleViewTenants.setAdapter(adapter)
         }
     }
 
@@ -90,8 +92,8 @@ class FlatItemActivity : AppCompatActivity() {
             builder.setMessage("Yakin ingin menghapus Kos ini?")
 
             builder.setPositiveButton(
-                "Yes",
-                DialogInterface.OnClickListener { dialog, _ ->
+                "Ya",
+                DialogInterface.OnClickListener { dialog, which ->
                     val cursor = databaseRequests.deleteFlat(flat.id)
                     if (cursor == -1)  Toast.makeText(this@FlatItemActivity, "Kesalahan dalam menghapus data", Toast.LENGTH_SHORT).show()
                     else {
@@ -103,8 +105,8 @@ class FlatItemActivity : AppCompatActivity() {
                 })
 
             builder.setNegativeButton(
-                "No",
-                DialogInterface.OnClickListener { dialog, _ ->
+                "Tidak",
+                DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
                 })
 
@@ -117,8 +119,8 @@ class FlatItemActivity : AppCompatActivity() {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setTitle("Error")
             builder.setNegativeButton(
-                "Оk",
-                DialogInterface.OnClickListener { dialog, _ ->
+                "OK",
+                DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
                 })
             builder.setMessage("penghapusan kos tidak dapat dilakukan karena masih terlibat dalam proses penagihan")

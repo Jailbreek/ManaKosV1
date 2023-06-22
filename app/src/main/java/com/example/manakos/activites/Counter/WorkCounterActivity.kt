@@ -5,12 +5,16 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.manakos.R
+import com.example.manakos.activites.Flat.FlatItemActivity
 import com.example.manakos.activites.Flat.ListFlatsActivity
 import com.example.manakos.database.DatabaseRequests
 import com.example.manakos.databinding.ActivityWorkCounterBinding
 import com.example.manakos.models.Counter
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class WorkCounterActivity : AppCompatActivity() {
@@ -18,7 +22,7 @@ class WorkCounterActivity : AppCompatActivity() {
     lateinit var counter: Counter
     lateinit var types: Array<String>
 
-    private lateinit var databaseRequests: DatabaseRequests
+    private lateinit var databaseRequests: DatabaseRequests;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWorkCounterBinding.inflate(layoutInflater)
@@ -62,7 +66,7 @@ class WorkCounterActivity : AppCompatActivity() {
 
         builder.setTitle("Error")
         builder.setNegativeButton(
-            "Оk",
+            "OK",
             DialogInterface.OnClickListener { dialog, which ->
                 dialog.dismiss()
             })
@@ -76,9 +80,9 @@ class WorkCounterActivity : AppCompatActivity() {
         else{
             when(error){
                 "count" ->
-                    builder.setMessage("Penghitung ini sudah ada.")
+                    builder.setMessage("Penghitung jenis ini dengan nomor ini sudah ada.")
                 "number" ->
-                    builder.setMessage("Input nomor penghitung salah: jumlah karakter minimum untuk baris adalah 6")
+                    builder.setMessage("Entri nomor penghitung salah: jumlah minimum karakter string adalah 6.")
             }
             builder.show()
         }
@@ -101,17 +105,17 @@ class WorkCounterActivity : AppCompatActivity() {
             counter.id_flat = id_flat
             binding.editTextNumberFlat.setText(databaseRequests.selectFlatNumberFromId(id_flat))
             binding.textView.text = "Penambahan"
-            binding.buttonWork.text = "Tambahkan"
+            binding.buttonWork.text = "tambah"
         } else {
             binding.textView.text = "Pengeditan"
-            binding.buttonWork.text = "Edit"
+            binding.buttonWork.text = "edit"
 
             counter = databaseRequests.selectCounterFromId(id)
 
             binding.editTextNumberFlat.setText(databaseRequests.selectFlatNumberFromId(counter.id_flat))
             binding.editTextNumberCounter.setText(counter.number)
             binding.checkUsed.isChecked = counter.used
-            binding.spinnerType.setSelection(types.indexOfFirst { it == (counter.type)})
+            binding.spinnerType.setSelection(types.indexOfFirst { it.equals(counter.type)})
         }
     }
 }

@@ -25,7 +25,7 @@ import com.example.manakos.models.Tenant
 
 class AccountActivity : AppCompatActivity() {
     lateinit var binding:ActivityAccountBinding
-    private lateinit var toggle: ActionBarDrawerToggle
+    lateinit var toggle: ActionBarDrawerToggle
 
     var id: Int = 0
     var role = ""
@@ -33,7 +33,7 @@ class AccountActivity : AppCompatActivity() {
     private lateinit var databaseRequests: DatabaseRequests
 
     var tenant = Tenant()
-    private var admin = Admin()
+    var admin = Admin()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,7 +144,7 @@ class AccountActivity : AppCompatActivity() {
         openDrawer(binding.drawer)
     }
 
-    private fun openDrawer(drawerLayout: DrawerLayout?) {
+    fun openDrawer(drawerLayout: DrawerLayout?) {
         drawerLayout!!.openDrawer(GravityCompat.START)
     }
 

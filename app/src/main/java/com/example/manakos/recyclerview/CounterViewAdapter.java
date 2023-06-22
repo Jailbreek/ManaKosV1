@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.manakos.R;
 import com.example.manakos.activites.Counter.CounterItemActivity;
+import com.example.manakos.activites.Tenant.TenantItemActivity;
 import com.example.manakos.database.DatabaseRequests;
 import com.example.manakos.models.Counter;
+import com.example.manakos.models.Tenant;
 
 import java.util.ArrayList;
 
-public class CounterViewAdapter extends RecyclerView.Adapter<CounterViewAdapter.MyViewHolder>{
+public class CounterViewAdapter extends RecyclerView.Adapter<CounterViewAdapter.MyViewHolder> {
 
     ArrayList<Counter> dataholder;
     private final Context context;
@@ -43,18 +45,19 @@ public class CounterViewAdapter extends RecyclerView.Adapter<CounterViewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.flat_number.setText("Nomor Kos: " + databaseRequests.selectFlatNumberFromId(dataholder.get(position).getId_flat()));
+        holder.flat_number.setText(
+                "Nomor Kos: " + databaseRequests.selectFlatNumberFromId(dataholder.get(position).getId_flat()));
         holder.type.setText("Tipe Counter: " + dataholder.get(position).getType());
-        if(dataholder.get(position).getUsed())
-            holder.used.setText("Digunakan: Ya");
+        if (dataholder.get(position).getUsed())
+            holder.used.setText("status digunakan: Ya");
         else
-            holder.used.setText("Digunakan: Tidak");
+            holder.used.setText("status digunakan: Tidak");
         holder.id = dataholder.get(position).getId();
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, CounterItemActivity.class);
-                intent.putExtra("id",dataholder.get(position).getId());
+                intent.putExtra("id", dataholder.get(position).getId());
                 activity.startActivity(intent);
             }
         });
@@ -65,16 +68,15 @@ public class CounterViewAdapter extends RecyclerView.Adapter<CounterViewAdapter.
         return dataholder.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView flat_number, type, used;
         int id;
         LinearLayout linearLayout;
-        public MyViewHolder(@NonNull View itemView)
-        {
+
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            flat_number = (TextView)itemView.findViewById(R.id.displayNumberFlat);
-            type = (TextView)itemView.findViewById(R.id.displayTypeCounter);
+            flat_number = (TextView) itemView.findViewById(R.id.displayNumberFlat);
+            type = (TextView) itemView.findViewById(R.id.displayTypeCounter);
             used = itemView.findViewById(R.id.displayUsed);
             linearLayout = itemView.findViewById(R.id.linearLayout);
         }

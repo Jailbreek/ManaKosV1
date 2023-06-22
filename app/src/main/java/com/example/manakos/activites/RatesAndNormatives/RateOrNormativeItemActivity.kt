@@ -4,8 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.manakos.activites.Indication.IndicationsActivity
 import com.example.manakos.database.DatabaseRequests
+import com.example.manakos.databinding.ActivityIndicationItemBinding
 import com.example.manakos.databinding.ActivityRateOrNormativeItemBinding
+import com.example.manakos.models.Indication
 import com.example.manakos.models.Normative
 import com.example.manakos.models.Rate
 
@@ -15,12 +18,11 @@ class RateOrNormativeItemActivity : AppCompatActivity() {
     private var rate = Rate()
     private var normative = Normative()
     private lateinit var databaseRequests: DatabaseRequests
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRateOrNormativeItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        databaseRequests = DatabaseRequests(this@RateOrNormativeItemActivity)
+        databaseRequests =  DatabaseRequests(this@RateOrNormativeItemActivity)
 
         fillData(intent.getIntExtra("id_rate", 0), intent.getIntExtra("id_normative", 0))
         binding.update.setOnClickListener(View.OnClickListener {
@@ -41,16 +43,17 @@ class RateOrNormativeItemActivity : AppCompatActivity() {
     }
 
     private fun fillData(id_rate: Int, id_normative: Int) {
-        if (id_rate != 0) {
+        if(id_rate != 0){
             rate = databaseRequests.selectRateFromId(id_rate)
 
-            binding.textView.text = "Tarif"
+            binding.textView.setText("Tarif")
             binding.txtVwName.text = rate.name
             binding.txtVwValue.text = rate.value.toString()
-        } else {
+        }
+        else{
             normative = databaseRequests.selectNormativeFromId(id_normative)
 
-            binding.textView.text = "Normatif"
+            binding.textView.setText("Normatif")
             binding.txtVwName.text = normative.name
             binding.txtVwValue.text = normative.value.toString()
         }

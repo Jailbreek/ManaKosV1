@@ -15,7 +15,7 @@ import com.example.manakos.databinding.ActivityLoginBinding
 
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var settings: SharedPreferences
+    private lateinit var settings: SharedPreferences;
     lateinit var binding: ActivityLoginBinding
     lateinit var databaseRequests: DatabaseRequests
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
         binding.buttonBack.setOnClickListener(View.OnClickListener { onClickBtnBack() })
     }
 
-    private fun onClickBtnBack (){
+    fun onClickBtnBack (){
         val i = Intent(this, MainActivity::class.java)
         startActivity(i)
     }

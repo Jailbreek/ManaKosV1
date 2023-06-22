@@ -19,7 +19,7 @@ import com.example.manakos.models.Flat;
 
 import java.util.ArrayList;
 
-public class FlatViewAdapter extends RecyclerView.Adapter<FlatViewAdapter.MyViewHolder>{
+public class FlatViewAdapter extends RecyclerView.Adapter<FlatViewAdapter.MyViewHolder> {
     ArrayList<Flat> dataholder;
     private final Context context;
     private final Activity activity;
@@ -39,14 +39,14 @@ public class FlatViewAdapter extends RecyclerView.Adapter<FlatViewAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.number.setText("Nomor unit: " + dataholder.get(position).getFlat_number());
+        holder.number.setText("Nomor Kos: " + dataholder.get(position).getFlat_number());
         holder.personal_account.setText("Token Listrik: " + dataholder.get(position).getPersonal_account());
         holder.id = dataholder.get(position).getId();
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, FlatItemActivity.class);
-                intent.putExtra("id",dataholder.get(position).getId());
+                intent.putExtra("id", dataholder.get(position).getId());
                 activity.startActivity(intent);
             }
         });
@@ -57,16 +57,15 @@ public class FlatViewAdapter extends RecyclerView.Adapter<FlatViewAdapter.MyView
         return dataholder.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView number, personal_account;
         int id;
         LinearLayout linearLayout;
-        public MyViewHolder(@NonNull View itemView)
-        {
+
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            number = (TextView)itemView.findViewById(R.id.displayNumber);
-            personal_account = (TextView)itemView.findViewById(R.id.displayPersonalAccount);
+            number = (TextView) itemView.findViewById(R.id.displayNumber);
+            personal_account = (TextView) itemView.findViewById(R.id.displayPersonalAccount);
             linearLayout = itemView.findViewById(R.id.linearLayout);
         }
     }

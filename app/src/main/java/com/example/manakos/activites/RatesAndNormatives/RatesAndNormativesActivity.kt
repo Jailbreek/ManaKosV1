@@ -29,8 +29,8 @@ class RatesAndNormativesActivity : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
 
     private lateinit var databaseRequests: DatabaseRequests
-    private var rates = ArrayList<Rate>()
-    private var normatives = ArrayList<Normative>()
+    private var rates = ArrayList<Rate>();
+    private var normatives = ArrayList<Normative>();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class RatesAndNormativesActivity : AppCompatActivity() {
             drawer.addDrawerListener(toggle)
             toggle.syncState()
 
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
             navView.setNavigationItemSelectedListener {
                 when(it.itemId){
@@ -84,8 +84,8 @@ class RatesAndNormativesActivity : AppCompatActivity() {
                 true
             }
         }
-        binding.recycleViewRates.layoutManager = LinearLayoutManager(this@RatesAndNormativesActivity)
-        binding.recycleViewNormatives.layoutManager = LinearLayoutManager(this@RatesAndNormativesActivity)
+        binding.recycleViewRates.setLayoutManager(LinearLayoutManager(this@RatesAndNormativesActivity));
+        binding.recycleViewNormatives.setLayoutManager(LinearLayoutManager(this@RatesAndNormativesActivity));
         databaseRequests =  DatabaseRequests(this@RatesAndNormativesActivity)
         fillData()
     }
@@ -94,9 +94,9 @@ class RatesAndNormativesActivity : AppCompatActivity() {
         rates = databaseRequests.selectRates()
         normatives = databaseRequests.selectNormatives()
         val adapterRates = RateViewAdapter(rates, this, this)
-        binding.recycleViewRates.adapter = adapterRates
+        binding.recycleViewRates.setAdapter(adapterRates)
         val adapterNormatives = NormativeViewAdapter(normatives, this, this)
-        binding.recycleViewNormatives.adapter = adapterNormatives
+        binding.recycleViewNormatives.setAdapter(adapterNormatives)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

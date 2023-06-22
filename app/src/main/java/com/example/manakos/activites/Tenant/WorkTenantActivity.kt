@@ -5,13 +5,17 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.manakos.database.DatabaseRequests
 import com.example.manakos.databinding.ActivityWorkTenantBinding
 import com.example.manakos.models.Tenant
+import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -22,7 +26,7 @@ class WorkTenantActivity : AppCompatActivity() {
     lateinit var binding: ActivityWorkTenantBinding
     lateinit var tenant: Tenant
 
-    private lateinit var databaseRequests: DatabaseRequests
+    private lateinit var databaseRequests: DatabaseRequests;
 
     val myCalendar = Calendar.getInstance()
 
@@ -53,7 +57,7 @@ class WorkTenantActivity : AppCompatActivity() {
         fillData(intent.getIntExtra("id", 0))
 
         binding.buttonWork.setOnClickListener(View.OnClickListener {
-            workTenant()
+            workTenant();
         })
 
         binding.buttonBack.setOnClickListener(View.OnClickListener { (transition()) })
@@ -62,8 +66,8 @@ class WorkTenantActivity : AppCompatActivity() {
     private fun fillData(id: Int) {
         tenant.id_tenant = id
         if (id != 0) {
-            binding.textView.text = "Edit"
-            binding.buttonWork.text = "Ubah"
+            binding.textView.text = "Pengeditan"
+            binding.buttonWork.text = "Edit"
             tenant = databaseRequests.selectTenantsFromId(id)
 
             binding.editTextFullName.setText(tenant.full_name)
@@ -72,15 +76,15 @@ class WorkTenantActivity : AppCompatActivity() {
             binding.editTextPhoneNumber.setText(tenant.phone_number)
             binding.editTextEmail.setText(tenant.email)
         } else {
-            binding.textView.text = "Tambah"
-            binding.buttonWork.text = "Tambahkan"
+            binding.textView.text = "Penambahan"
+            binding.buttonWork.text = "Tambah"
         }
     }
 
     private fun updateLabel() {
         val myFormat = "dd-MM-yyyy"
         val dateFormat = SimpleDateFormat(myFormat, Locale("ru"))
-        binding.editTextDate.setText(dateFormat.format(myCalendar.time))
+        binding.editTextDate.setText(dateFormat.format(myCalendar.getTime()))
     }
 
     private fun workTenant() {
@@ -98,9 +102,9 @@ class WorkTenantActivity : AppCompatActivity() {
 
         if(tenant.email.isNotEmpty() && !isEmailValid(tenant.email)) error = "email"
         if(tenant.full_name.length < 2) error = "full_name"
-        if(tenant.phone_number.isEmpty()) error = "phone_number"
+        if(tenant.phone_number.length < 1) error = "phone_number"
         if(tenant.date_of_registration == null) error = "date_of_registration"
-        if(tenant.number_of_family_members.toString().isEmpty()) error = "number_of_family_members"
+        if(tenant.number_of_family_members.toString().length < 1) error = "number_of_family_members"
 
         var count = 0
         if (tenant.id_tenant == null || tenant.id_tenant == 0) {
@@ -117,7 +121,7 @@ class WorkTenantActivity : AppCompatActivity() {
 
         builder.setTitle("Error")
         builder.setNegativeButton(
-            "Оk",
+            "OK",
             DialogInterface.OnClickListener { dialog, which ->
                 dialog.dismiss()
             })
@@ -163,5 +167,6 @@ class WorkTenantActivity : AppCompatActivity() {
             startActivity(i)
         }
     }
+
 }
 

@@ -14,13 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.manakos.R;
+import com.example.manakos.activites.Indication.IndicationItemActivity;
 import com.example.manakos.activites.RatesAndNormatives.RateOrNormativeItemActivity;
 import com.example.manakos.database.DatabaseRequests;
+import com.example.manakos.models.Indication;
 import com.example.manakos.models.Rate;
 
 import java.util.ArrayList;
 
-public class RateViewAdapter extends RecyclerView.Adapter<RateViewAdapter.MyViewHolder>{
+public class RateViewAdapter extends RecyclerView.Adapter<RateViewAdapter.MyViewHolder> {
 
     ArrayList<Rate> dataholder;
     private final Context context;
@@ -43,14 +45,14 @@ public class RateViewAdapter extends RecyclerView.Adapter<RateViewAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.name.setText("Tarif: " + (dataholder.get(position).getName()));
+        holder.name.setText("Fasilitas: " + (dataholder.get(position).getName()));
         holder.value.setText("Harga: " + dataholder.get(position).getValue());
         holder.id = dataholder.get(position).getId();
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, RateOrNormativeItemActivity.class);
-                intent.putExtra("id_rate",dataholder.get(position).getId());
+                intent.putExtra("id_rate", dataholder.get(position).getId());
                 activity.startActivity(intent);
             }
         });
@@ -61,16 +63,15 @@ public class RateViewAdapter extends RecyclerView.Adapter<RateViewAdapter.MyView
         return dataholder.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name, value;
         int id;
         LinearLayout linearLayout;
-        public MyViewHolder(@NonNull View itemView)
-        {
+
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = (TextView)itemView.findViewById(R.id.displayNameRate);
-            value = (TextView)itemView.findViewById(R.id.displayValueRate);
+            name = (TextView) itemView.findViewById(R.id.displayNameRate);
+            value = (TextView) itemView.findViewById(R.id.displayValueRate);
             linearLayout = itemView.findViewById(R.id.linearLayout);
         }
     }

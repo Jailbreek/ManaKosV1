@@ -22,9 +22,9 @@ import com.google.gson.Gson
 class ListTenantsActivity : AppCompatActivity() {
     lateinit var binding: ActivityListTenantsBinding
 
-    private var tenants = ArrayList<Tenant>()
+    private var tenants = ArrayList<Tenant>();
     private lateinit var flat: Flat
-    private lateinit var databaseRequests:DatabaseRequests
+    private lateinit var databaseRequests:DatabaseRequests;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +57,7 @@ class ListTenantsActivity : AppCompatActivity() {
     private fun searchTenant() {
         val newTenants = tenants.filter { it.full_name.contains(binding.serchViewTenant.query)  } as ArrayList<Tenant>
         var values = emptyArray<String>()
-        for (i in 0 until newTenants.size){
+        for (i in 0..newTenants.size - 1){
             values += ("Nama: " + newTenants[i].full_name + ",\nNomor Telepon: " + newTenants[i].phone_number)
         }
 
@@ -88,7 +88,7 @@ class ListTenantsActivity : AppCompatActivity() {
     private fun fillData() {
         tenants = databaseRequests.selectTenants()
         var values = emptyArray<String>()
-        for (i in 0 until tenants.size){
+        for (i in 0..tenants.size - 1){
             values += ("Nama: " + tenants[i].full_name + ",\nNomor Telepon: " + tenants[i].phone_number)
         }
 
@@ -103,7 +103,7 @@ class ListTenantsActivity : AppCompatActivity() {
             binding.listTenants.isEnabled = !binding.checkBox.isChecked
         }
 
-        if(flat.id != null) binding.buttonWork.text = "Ubah"
+        if(flat.id != null) binding.buttonWork.text = "Edit"
         else binding.buttonWork.text = "Tambah"
 
         if(tenants.size == 0) binding.buttonWork.isEnabled = false

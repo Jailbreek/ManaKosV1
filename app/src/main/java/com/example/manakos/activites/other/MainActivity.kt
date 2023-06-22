@@ -12,7 +12,7 @@ import com.example.manakos.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var settings: SharedPreferences
+    lateinit var settings: SharedPreferences;
     lateinit var binding: ActivityMainBinding
     lateinit var databaseRequests: DatabaseRequests
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         settings = getSharedPreferences("my_storage", Context.MODE_PRIVATE)
-        if(settings.getBoolean("is_logged", false)){
+        if(settings.getBoolean("is_logged", false) == true){
             val i = Intent(this, MenuActivity::class.java)
             startActivity(i)
         }

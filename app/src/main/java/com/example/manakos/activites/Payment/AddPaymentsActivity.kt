@@ -1,10 +1,10 @@
 package com.example.manakos.activites.Payment
 
-//noinspection SuspiciousImport
 import android.R
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
@@ -21,10 +21,10 @@ import org.apache.poi.hssf.usermodel.HSSFSheet
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.Row
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.math.RoundingMode
+import java.nio.file.Path
 import java.time.LocalDate
 
 
@@ -55,10 +55,10 @@ class AddPaymentsActivity : AppCompatActivity() {
 
     private fun createReport() {
         val workbook = HSSFWorkbook()
-        val sheet = workbook.createSheet("Pendapatan")
+        val sheet = workbook.createSheet("Начисления")
         val payments = databaseRequests.selectPaymentsFromPeriod(payment.period)
 
-        var rowNum = 0
+        var rowNum = 0;
 
         val row: Row = sheet.createRow(rowNum)
         row.createCell(0).setCellValue("Periode")
@@ -67,42 +67,38 @@ class AddPaymentsActivity : AppCompatActivity() {
         row.createCell(3).setCellValue("Total")
         row.createCell(4).setCellValue("Status Pembayaran")
 
-        // Mengisi lembar dengan data
+        // mengisi lembar dengan data
         for (payment_item in payments) {
-            createSheetHeader(sheet, ++rowNum, payment_item)
+            createSheetHeader(sheet, ++rowNum, payment_item);
         }
 
-        // Menulis dokumen Excel yang telah dibuat di memori ke file
+        // Tulis dokumen yang dibuat di memori Excel ke sebuah file
         try {
             FileOutputStream(File(getExternalPath().path)).use { out -> workbook.write(out) }
-            Toast.makeText(this, "Laporan berhasil disimpan di folder Unduhan", Toast.LENGTH_SHORT).show()
-        } catch (e: FileNotFoundException) {
-            Toast.makeText(this, "File tidak ditemukan", Toast.LENGTH_SHORT).show()
-        } catch (e: SecurityException) {
-            Toast.makeText(this, "Tidak diizinkan untuk mengakses penyimpanan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Laporan berhasil disimpan di folder Unduhan", Toast.LENGTH_SHORT).
+            show()
         } catch (e: IOException) {
-            Toast.makeText(this, "Gagal membuat laporan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Gagal membuat laporan", Toast.LENGTH_SHORT).
+            show()
         }
-
 
         val i = Intent(this, PaymentsActivity::class.java)
         startActivity(i)
     }
-
 
     private fun getExternalPath(): File {
         return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path, "Laporan Tagihan yang belum dibayar.xls")
     }
 
     private fun createSheetHeader(sheet: HSSFSheet, rowNum: Int, payment: Payment) {
-        val row = sheet.createRow(rowNum)
+        val row = sheet.createRow(rowNum);
 
-        row.createCell(0).setCellValue(payment.period)
-        row.createCell(1).setCellValue(databaseRequests.selectNameRateFromId(payment.id_rate))
-        row.createCell(2).setCellValue(databaseRequests.selectFlatNumberFromId(payment.id_flat))
+        row.createCell(0).setCellValue(payment.period);
+        row.createCell(1).setCellValue(databaseRequests.selectNameRateFromId(payment.id_rate));
+        row.createCell(2).setCellValue(databaseRequests.selectFlatNumberFromId(payment.id_flat));
         row.createCell(3).setCellValue(payment.amount.toString().toDouble())
         if(payment.status == true) row.createCell(4).setCellValue("Dibayar")
-        else row.createCell(4).setCellValue("Не Dibayar")
+        else row.createCell(4).setCellValue("Belum dibayar")
     }
 
     private fun fillPeriod() {
@@ -110,19 +106,16 @@ class AddPaymentsActivity : AppCompatActivity() {
         val monthNames = arrayOf("Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember")
         var period = ""
-        period = if (date.monthValue - 1 == 0)
-            (monthNames[11] + " " + (date.year - 1))
-        else
-            (monthNames[date.monthValue - 2] + " " + (date.year))
+        if(date.monthValue - 1 == 0) period = (monthNames[11] + " " + (date.year - 1))
+        else period = (monthNames[date.monthValue - 2] + " " + (date.year))
         payment.period = period
         periods = databaseRequests.selectPeriodsFromPayments()
-        if (databaseRequests.selectCountPaymentsWherePeriod(period) == 0)
-            periods.add(period)
+        if(databaseRequests.selectCountPaymentsWherePeriod(period) == 0) periods.add(period)
         binding.editPeriod.adapter = ArrayAdapter(this, R.layout.simple_list_item_1, periods)
         binding.editPeriod.setSelection(periods.indexOf(period))
         binding.editPeriod.isEnabled = false
 
-        if (intent.getIntExtra("report", 0) == 1) {
+        if(intent.getIntExtra("report", 0) == 1){
             binding.buttonWork.text = "Buat Laporan"
             binding.textViewP.text = "Membuat Laporan"
             binding.textView.text = "tentang Pembayaran"
@@ -130,18 +123,16 @@ class AddPaymentsActivity : AppCompatActivity() {
         }
     }
 
-
     private fun addPayments() {
         val count = databaseRequests.selectCountPaymentsWherePeriod(payment.period)
-        if (count != 0) {
+        if (count != 0){
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-            builder.setTitle("Error")
+            builder.setTitle("Ошибка")
             builder.setNegativeButton(
-                "Ok",
+                "Ок",
                 DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
-                }
-            )
+                })
             builder.setMessage("Tidak dapat menambahkan pembayaran baru karena pembayaran untuk periode ini sudah dilakukan!")
             builder.show()
         }
@@ -184,9 +175,9 @@ class AddPaymentsActivity : AppCompatActivity() {
                     val sum_noind_te = 0f
                     for (counter: Counter in counters) {
                         when (counter.type) {
-                            "Sistem Pengukuran Air Dingin" -> {
-                                val rate = rates.first { it.name == "Air Dingin" }
-                                val normative = normatives.first { it.name == "Air Dingin" }
+                            "Meteran Air Dingin" -> {
+                                val rate = rates.first { it.name == "Air dingin" }
+                                val normative = normatives.first { it.name == "Air dingin" }
 
                                 val indication = indications.firstOrNull { it.id_counter == counter.id }
                                 payment_cw.period = payment.period
@@ -203,7 +194,7 @@ class AddPaymentsActivity : AppCompatActivity() {
                                     sum_ind_cw += indication.value * rate.value
                                 }
                             }
-                            "Sistem Pengukuran Air Panas" -> {
+                            "Meteran Air Panas" -> {
                                 val rate = rates.first { it.name == "Air Panas" }
                                 val normative = normatives.first { it.name == "Air Panas" }
 
@@ -223,7 +214,7 @@ class AddPaymentsActivity : AppCompatActivity() {
                                         sum_ind_hw += indication.value * rate.value
                                     }
                             }
-                            "Sistem Pengukuran Listrik" -> {
+                            "Meteran Listrik" -> {
                                 val rate = rates.first { it.name == "Listrik" }
                                 val normative = normatives.first { it.name == "Listrik" }
 
@@ -243,7 +234,7 @@ class AddPaymentsActivity : AppCompatActivity() {
                                     sum_ind_ee += indication.value * rate.value
                                 }
                             }
-                            "Sistem Pengukuran Gas" -> {
+                            "Meteran Gas" -> {
                                 val rate = rates.first { it.name == "Gas" }
                                 val normative = normatives.first { it.name == "Gas" }
 
@@ -264,7 +255,7 @@ class AddPaymentsActivity : AppCompatActivity() {
                                     sum_ind_g += indication.value * rate.value
                                 }
                             }
-                            "Sistem Pengukuran Pemanasan" -> {
+                            "Meteran Energi Panas" -> {
                                 val rate = rates.first { it.name == "Energi Panas" }
                                 val normative = normatives.first { it.name == "Energi Panas" }
 
@@ -287,10 +278,10 @@ class AddPaymentsActivity : AppCompatActivity() {
                         }
                     }
                     var found = 0
-                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran air dingin") }.count())
+                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran Air Dingin") }.count())
                     if (found == 0) {
-                        val rate = rates.first { it.name == "Air dingin" }
-                        val normative = normatives.first { it.name == "Air dingin" }
+                        val rate = rates.first { it.name == "Air Dingin" }
+                        val normative = normatives.first { it.name == "Air Dingin" }
 
                         var amount: Float? = null
                         if (flat.number_of_registered_residents != 0)
@@ -312,11 +303,11 @@ class AddPaymentsActivity : AppCompatActivity() {
                         databaseRequests.createPayment(payment_cw)
                     }
                     found = 0
-                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran air panas")
+                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran Air Panas")
                     }.count())
                     if (found == 0) {
-                        val rate = rates.filter { it.name == "Air panas" }.first()
-                        val normative = normatives.filter { it.name == "Air panas" }.first()
+                        val rate = rates.filter { it.name == "Air Panas" }.first()
+                        val normative = normatives.filter { it.name == "Air Panas" }.first()
 
                         var amount: Float? = null
                         if (flat.number_of_registered_residents != 0)
@@ -338,7 +329,7 @@ class AddPaymentsActivity : AppCompatActivity() {
                         databaseRequests.createPayment(payment_hw)
                     }
                     found = 0
-                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran listrik") }.count())
+                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran Listrik") }.count())
                     if (found == 0) {
                         val rate = rates.filter { it.name == "Listrik" }.first()
                         val normative = normatives.filter { it.name == "Listrik" }.first()
@@ -363,7 +354,7 @@ class AddPaymentsActivity : AppCompatActivity() {
                         databaseRequests.createPayment(payment_ee)
                     }
                     found = 0
-                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran gas") }.count())
+                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran Gas") }.count())
                     if (found == 0) {
                         val rate = rates.filter { it.name == "Gas" }.first()
                         val normative = normatives.filter { it.name == "Gas" }.first()
@@ -388,7 +379,7 @@ class AddPaymentsActivity : AppCompatActivity() {
                         databaseRequests.createPayment(payment_g)
                     }
                     found = 0
-                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran pemanas") }.count())
+                    found = Math.toIntExact(counters.stream().filter { x -> x.type.equals("Meteran Energi Panas") }.count())
                     if (found == 0) {
                         val rate = rates.filter { it.name == "Energi Panas" }.first()
                         val normative = normatives.filter { it.name == "Energi Panas" }.first()
@@ -411,7 +402,7 @@ class AddPaymentsActivity : AppCompatActivity() {
                     }
                 }
             }
-            Toast.makeText(this, "Perhitungan dilakukan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Perhitungan Dilakukan", Toast.LENGTH_SHORT).show()
             val i = Intent(this, PaymentsActivity::class.java)
             startActivity(i)
 //////////////////////////----------------------------------------------------------------------------------------------------------------

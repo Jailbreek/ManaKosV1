@@ -17,10 +17,11 @@ import com.example.manakos.R;
 import com.example.manakos.activites.RatesAndNormatives.RateOrNormativeItemActivity;
 import com.example.manakos.database.DatabaseRequests;
 import com.example.manakos.models.Normative;
+import com.example.manakos.models.Rate;
 
 import java.util.ArrayList;
 
-public class NormativeViewAdapter extends RecyclerView.Adapter<NormativeViewAdapter.MyViewHolder>{
+public class NormativeViewAdapter extends RecyclerView.Adapter<NormativeViewAdapter.MyViewHolder> {
 
     ArrayList<Normative> dataholder;
     private final Context context;
@@ -50,7 +51,7 @@ public class NormativeViewAdapter extends RecyclerView.Adapter<NormativeViewAdap
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, RateOrNormativeItemActivity.class);
-                intent.putExtra("id_normative",dataholder.get(position).getId());
+                intent.putExtra("id_normative", dataholder.get(position).getId());
                 activity.startActivity(intent);
             }
         });
@@ -61,16 +62,15 @@ public class NormativeViewAdapter extends RecyclerView.Adapter<NormativeViewAdap
         return dataholder.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name, value;
         int id;
         LinearLayout linearLayout;
-        public MyViewHolder(@NonNull View itemView)
-        {
+
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = (TextView)itemView.findViewById(R.id.displayNameNormative);
-            value = (TextView)itemView.findViewById(R.id.displayValueNormative);
+            name = (TextView) itemView.findViewById(R.id.displayNameNormative);
+            value = (TextView) itemView.findViewById(R.id.displayValueNormative);
             linearLayout = itemView.findViewById(R.id.linearLayout);
         }
     }

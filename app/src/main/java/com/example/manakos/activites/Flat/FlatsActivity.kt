@@ -38,7 +38,7 @@ class FlatsActivity : AppCompatActivity() {
     lateinit var settings: SharedPreferences
 
     private lateinit var databaseRequests: DatabaseRequests
-    private var flats = ArrayList<Flat>()
+    private var flats = ArrayList<Flat>();
 
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +57,8 @@ class FlatsActivity : AppCompatActivity() {
             drawer.addDrawerListener(toggle)
             toggle.syncState()
 
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            window.setFlags(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE, WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true);
+            getWindow().setFlags(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE, WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
 
             navView.setNavigationItemSelectedListener {
                 when (it.itemId) {
@@ -100,7 +100,7 @@ class FlatsActivity : AppCompatActivity() {
         }
         //menu-end
 
-        binding.recycleViewFlats.layoutManager = LinearLayoutManager(this)
+        binding.recycleViewFlats.setLayoutManager(LinearLayoutManager(this));
         databaseRequests =  DatabaseRequests(this@FlatsActivity)
         binding.addFlat.setOnClickListener(View.OnClickListener {addFlat()})
         binding.serchViewFlat.setOnClickListener(View.OnClickListener {
@@ -123,7 +123,7 @@ class FlatsActivity : AppCompatActivity() {
     private fun searchFlat() {
         val newFlats = flats.filter { it.flat_number.contains(binding.serchViewFlat.query)  } as ArrayList<Flat>
         adapter = FlatViewAdapter(newFlats, this, this)
-        binding.recycleViewFlats.adapter = adapter
+        binding.recycleViewFlats.setAdapter(adapter)
     }
 
     private fun addFlat() {
@@ -149,6 +149,6 @@ class FlatsActivity : AppCompatActivity() {
         if (id == 0) flats = databaseRequests.selectFlats()
         else flats = databaseRequests.selectFlatsFromIdTenant(id)
         adapter = FlatViewAdapter(flats, this, this)
-        binding.recycleViewFlats.adapter = adapter
+        binding.recycleViewFlats.setAdapter(adapter)
     }
 }

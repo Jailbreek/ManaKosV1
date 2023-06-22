@@ -33,8 +33,8 @@ class TenantsActivity : AppCompatActivity() {
     var role = ""
     lateinit var settings: SharedPreferences
 
-    private var tenants = ArrayList<Tenant>()
-    private lateinit var databaseRequests:DatabaseRequests
+    private var tenants = ArrayList<Tenant>();
+    private lateinit var databaseRequests:DatabaseRequests;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,7 @@ class TenantsActivity : AppCompatActivity() {
             toggle.syncState()
             settings = getSharedPreferences("my_storage", Context.MODE_PRIVATE)
 
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true);
 
             navView.setNavigationItemSelectedListener {
                 when(it.itemId){
@@ -88,7 +88,7 @@ class TenantsActivity : AppCompatActivity() {
                 }
                 true
             }
-            binding.recycleViewTenants.layoutManager = LinearLayoutManager(this@TenantsActivity)
+            binding.recycleViewTenants.setLayoutManager(LinearLayoutManager(this@TenantsActivity));
             databaseRequests =  DatabaseRequests(this@TenantsActivity)
             binding.serchViewTenant.setOnClickListener(View.OnClickListener {
                 searchTenant()
@@ -100,7 +100,7 @@ class TenantsActivity : AppCompatActivity() {
     private fun searchTenant() {
         val newTenants = tenants.filter { it.full_name.contains(binding.serchViewTenant.query)  } as ArrayList<Tenant>
         adapter = TenantViewAdapter(newTenants, this, this)
-        binding.recycleViewTenants.adapter = adapter
+        binding.recycleViewTenants.setAdapter(adapter)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -121,7 +121,7 @@ class TenantsActivity : AppCompatActivity() {
         if(id == 0) tenants = databaseRequests.selectTenants()
         else tenants.add(databaseRequests.selectTenantsFromId(id))
         adapter = TenantViewAdapter(tenants, this, this)
-        binding.recycleViewTenants.adapter = adapter
+        binding.recycleViewTenants.setAdapter(adapter)
     }
 
     fun OnClickAddTenant(view: View?){

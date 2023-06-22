@@ -62,14 +62,14 @@ class WorkFlatActivity : AppCompatActivity() {
 
         var error: String? = null
 
-        if(binding.editNumberOfOwners.text.toString().isEmpty() || flat.number_of_owners == 0) error = "number_of_owners"
-        if(binding.editNumberOfResidents.text.toString().isEmpty()) error = "number_of_registered_residents"
-        if(flat.number_of_rooms.isEmpty()) error = "number_of_rooms"
-        if(flat.entrance_number.isEmpty()) error = "entrance_number"
-        if(binding.editTextUsableArea.text.toString().isEmpty() || (flat.usable_area > flat.total_area)) error = "usable_area"
-        if(binding.editTextTotalArea.text.toString().isEmpty()) error = "total_area"
+        if(binding.editNumberOfOwners.text.toString().length < 1 || flat.number_of_owners == 0) error = "number_of_owners"
+        if(binding.editNumberOfResidents.text.toString().length < 1) error = "number_of_registered_residents"
+        if(flat.number_of_rooms.length < 1) error = "number_of_rooms"
+        if(flat.entrance_number.length < 1) error = "entrance_number"
+        if(binding.editTextUsableArea.text.toString().length < 1 || (flat.usable_area > flat.total_area)) error = "usable_area"
+        if(binding.editTextTotalArea.text.toString().length < 1) error = "total_area"
         if(flat.personal_account.length < 8) error = "personal_account"
-        if(flat.flat_number.isEmpty()) error = "flat"
+        if(flat.flat_number.length < 1) error = "flat"
 
 
         var count = 0
@@ -79,10 +79,10 @@ class WorkFlatActivity : AppCompatActivity() {
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
-        builder.setTitle("Error")
+        builder.setTitle("Ошибка")
         builder.setNegativeButton(
-            "Оk",
-            DialogInterface.OnClickListener { dialog, _ ->
+            "Ок",
+            DialogInterface.OnClickListener { dialog, which ->
                 dialog.dismiss()
             })
 
@@ -132,7 +132,7 @@ class WorkFlatActivity : AppCompatActivity() {
     private fun fillData(id: Int, str: String?) {
         if(str == null){
             if(id != 0){
-                binding.textView.text = "Edit"
+                binding.textView.text = "Pengeditan"
                 flat = databaseRequests.selectFlatFromId(id)
 
                 binding.editTextNumberFlat.setText(flat.flat_number)
@@ -151,7 +151,7 @@ class WorkFlatActivity : AppCompatActivity() {
         else
         {
             flat = Gson().fromJson(str, Flat::class.javaObjectType)
-            if(flat.id != null) binding.textView.text = "Edit"
+            if(flat.id != null) binding.textView.text = "Pengeditan"
             else binding.textView.text = "Create"
 
                 binding.editTextNumberFlat.setText(flat.flat_number)

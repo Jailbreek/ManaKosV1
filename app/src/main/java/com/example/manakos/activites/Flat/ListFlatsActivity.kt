@@ -12,6 +12,8 @@ import com.example.manakos.activites.Counter.WorkCounterActivity
 import com.example.manakos.database.DatabaseRequests
 import com.example.manakos.databinding.ActivityListFlatsBinding
 import com.example.manakos.models.Flat
+import com.example.manakos.models.Tenant
+import com.google.gson.Gson
 
 class ListFlatsActivity : AppCompatActivity() {
     lateinit var binding: ActivityListFlatsBinding
@@ -46,7 +48,7 @@ class ListFlatsActivity : AppCompatActivity() {
     private fun searchFlat() {
         val newFlats = flats.filter { it.flat_number.contains(binding.serchViewFlat.query)  } as ArrayList<Flat>
         var values = emptyArray<String>()
-        for (i in 0 until newFlats.size){
+        for (i in 0..newFlats.size - 1){
             values += ("Nomor Kos: " + newFlats[i].flat_number + ",\nToken Listrik: " + newFlats[i].personal_account)
         }
 
@@ -58,7 +60,7 @@ class ListFlatsActivity : AppCompatActivity() {
     private fun fillData() {
         flats = databaseRequests.selectFlats()
         var values = emptyArray<String>()
-        for (i in 0 until flats.size){
+        for (i in 0..flats.size - 1){
             values += ("Nomor Kos: " + flats[i].flat_number + ",\nToken Listrik: " + flats[i].personal_account)
         }
 

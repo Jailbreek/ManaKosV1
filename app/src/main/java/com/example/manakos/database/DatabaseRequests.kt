@@ -14,17 +14,18 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class DatabaseRequests(private var context: Context) {
-    private var mDBHelper: DatabaseHelper = DatabaseHelper(context)
+    private var mDBHelper: DatabaseHelper
     private var mDb: SQLiteDatabase
 
     init {
+        mDBHelper = DatabaseHelper(context)
         try {
             mDBHelper.updateDataBase()
         } catch (mIOException: IOException) {
             throw Error("Tidak dapat memperbarui database")
         }
         mDb = try {
-            mDBHelper.writableDatabase
+            mDBHelper.getWritableDatabase()
         } catch (mSQLException: SQLException) {
             throw mSQLException
         }
@@ -32,11 +33,11 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectTenants(): ArrayList<Tenant> {
-        val tenants = ArrayList<Tenant>()
+        val tenants = ArrayList<Tenant>();
         val dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val cursor = mDb.rawQuery("SELECT * FROM tenant", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             val tenant = Tenant(cursor.getInt(0), cursor.getString(1), LocalDate.parse(cursor.getString(2), dtf), cursor.getString(3), cursor.getString(6), cursor.getString(4), cursor.getString(5))
             tenants.add(tenant)
             cursor.moveToNext()
@@ -49,7 +50,7 @@ class DatabaseRequests(private var context: Context) {
         val dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM tenant WHERE id = $id", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             tenant = Tenant(cursor.getInt(0), cursor.getString(1), LocalDate.parse(cursor.getString(2), dtf), cursor.getString(3), cursor.getString(6), cursor.getString(4), cursor.getString(5))
             cursor.moveToNext()
         }
@@ -62,7 +63,7 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectCountTenantsFromFlats(id: Int): Int {
-        val cursor: Cursor = mDb.rawQuery("SELECT * FROM flat WHERE id_tenant = $id", null)
+        val cursor: Cursor = mDb.rawQuery("SELECT * FROM flat WHERE id_tenant = " + id, null)
         return cursor.count
     }
 
@@ -123,7 +124,7 @@ class DatabaseRequests(private var context: Context) {
 
         val cursor: Int = mDb.update("tenant", cv, "id=?",arrayOf<String>(tenant.id_tenant.toString()))
         if(cursor == -1){
-            Toast.makeText(context, "Gagal menambahkan ke database!", Toast.LENGTH_SHORT).
+            Toast.makeText(context, "Gagal mengubah ke database!", Toast.LENGTH_SHORT).
             show()
         }
         else {
@@ -132,7 +133,7 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectFlats(): ArrayList<Flat> {
-        val flats = ArrayList<Flat>()
+        val flats = ArrayList<Flat>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM flat", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
@@ -148,7 +149,7 @@ class DatabaseRequests(private var context: Context) {
         var flat = Flat()
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM flat WHERE id = $id", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             flat = Flat(cursor.getInt(0), cursor.getString(2),cursor.getString(1),cursor.getFloat(3),cursor.getFloat(4),cursor.getString(5),cursor.getString(6),cursor.getInt(7), cursor.getInt(8), cursor.getInt(9))
             cursor.moveToNext()
         }
@@ -220,11 +221,11 @@ class DatabaseRequests(private var context: Context) {
         val cursor: Int = mDb.update("flat", cv, "id=?",arrayOf<String>(flat.id.toString()))
 
         if(cursor == -1){
-            Toast.makeText(context, "Gagal mengubah dalam database!", Toast.LENGTH_SHORT).
+            Toast.makeText(context, "Gagal mengubah ke database!", Toast.LENGTH_SHORT).
             show()
         }
         else {
-            Toast.makeText(context, "Kamar diubah", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Kamar diperbarui", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -232,7 +233,7 @@ class DatabaseRequests(private var context: Context) {
         val cursor = mDb.rawQuery("SELECT * FROM flat WHERE id = $id", null)
         var number = ""
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             number = cursor.getString(1)
             cursor.moveToNext()
         }
@@ -240,10 +241,10 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectCounters(): ArrayList<Counter> {
-        val counters = ArrayList<Counter>()
+        val counters = ArrayList<Counter>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM counter", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             val counter = Counter(cursor.getInt(0), cursor.getString(1),cursor.getString(2),cursor.getString(3).toBoolean(), cursor.getInt(4))
             counters.add(counter)
             cursor.moveToNext()
@@ -252,10 +253,10 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectFlatsFromIdTenant(id: Int): ArrayList<Flat> {
-        val flats = ArrayList<Flat>()
+        val flats = ArrayList<Flat>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM flat WHERE id_tenant = $id", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             flats.add(Flat(cursor.getInt(0), cursor.getString(2),cursor.getString(1),cursor.getFloat(3),cursor.getFloat(4),cursor.getString(5),cursor.getString(6),cursor.getInt(7), cursor.getInt(8), cursor.getInt(9)))
             cursor.moveToNext()
         }
@@ -266,7 +267,7 @@ class DatabaseRequests(private var context: Context) {
         var counter = Counter()
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM counter WHERE id = $id", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             counter = Counter(cursor.getInt(0), cursor.getString(1),cursor.getString(2),cursor.getString(3).toBoolean(), cursor.getInt(4))
             cursor.moveToNext()
         }
@@ -324,7 +325,7 @@ class DatabaseRequests(private var context: Context) {
         val cursor: Int = mDb.update("counter", cv, "id=?",arrayOf<String>(counter.id.toString()))
 
         if(cursor == -1){
-            Toast.makeText(context, "Gagal menambahkan ke database!", Toast.LENGTH_SHORT).
+            Toast.makeText(context, "Gagal mengubah ke database!", Toast.LENGTH_SHORT).
             show()
         }
         else {
@@ -344,7 +345,7 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectIndications(): ArrayList<Indication> {
-        val indications = ArrayList<Indication>()
+        val indications = ArrayList<Indication>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM indication", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
@@ -370,7 +371,7 @@ class DatabaseRequests(private var context: Context) {
         var indication = Indication()
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM indication WHERE id = $id", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             indication = Indication(cursor.getInt(0), cursor.getString(1),cursor.getInt(2), cursor.getInt(3))
             cursor.moveToNext()
         }
@@ -378,10 +379,10 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectCountersWhereUsed(): ArrayList<Counter> {
-        val counters = ArrayList<Counter>()
+        val counters = ArrayList<Counter>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM counter WHERE used = 'true'", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             val counter = Counter(cursor.getInt(0), cursor.getString(1),cursor.getString(2),cursor.getString(3).toBoolean(), cursor.getInt(4))
             counters.add(counter)
             cursor.moveToNext()
@@ -414,11 +415,11 @@ class DatabaseRequests(private var context: Context) {
 
         val l: Long = -1
         if(cursor == l){
-            Toast.makeText(context, "Gagal menyimpan indikasi ke database!", Toast.LENGTH_SHORT).
+            Toast.makeText(context, "Gagal menambahkan ke database!", Toast.LENGTH_SHORT).
             show()
         }
         else {
-            Toast.makeText(context, "Indikasi berhasil disimpan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Indikasi ditambahkan", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -431,19 +432,19 @@ class DatabaseRequests(private var context: Context) {
         val cursor: Int = mDb.update("indication", cv, "id=?",arrayOf<String>(indication.id.toString()))
 
         if(cursor == -1){
-            Toast.makeText(context, "Gagal menyimpan indikasi ke database!", Toast.LENGTH_SHORT).
+            Toast.makeText(context, "Gagal mengubah ke database!", Toast.LENGTH_SHORT).
             show()
         }
         else {
-            Toast.makeText(context, "Indikasi berhasil diupdate", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Indikasi diperbarui", Toast.LENGTH_SHORT).show()
         }
     }
 
     fun selectRates(): ArrayList<Rate> {
-        val rates = ArrayList<Rate>()
+        val rates = ArrayList<Rate>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM rate", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             val rate = Rate(cursor.getInt(0), cursor.getString(1),cursor.getFloat(2))
             rates.add(rate)
             cursor.moveToNext()
@@ -452,10 +453,10 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectNormatives(): ArrayList<Normative> {
-        val normatives = ArrayList<Normative>()
+        val normatives = ArrayList<Normative>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM normative", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             val normative = Normative(cursor.getInt(0), cursor.getString(1),cursor.getFloat(2))
             normatives.add(normative)
             cursor.moveToNext()
@@ -467,7 +468,7 @@ class DatabaseRequests(private var context: Context) {
         var rate = Rate()
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM rate WHERE id = $id", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             rate = Rate(cursor.getInt(0), cursor.getString(1),cursor.getFloat(2))
             cursor.moveToNext()
         }
@@ -478,7 +479,7 @@ class DatabaseRequests(private var context: Context) {
         var normative = Normative()
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM normative WHERE id = $id", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             normative = Normative(cursor.getInt(0), cursor.getString(1),cursor.getFloat(2))
             cursor.moveToNext()
         }
@@ -493,7 +494,7 @@ class DatabaseRequests(private var context: Context) {
         val cursor: Int = mDb.update("rate", cv, "id=?",arrayOf<String>(rate.id.toString()))
 
         if(cursor == -1){
-            Toast.makeText(context, "Gagal mengubah dalam database!", Toast.LENGTH_SHORT).
+            Toast.makeText(context, "Gagal update ke database!", Toast.LENGTH_SHORT).
             show()
         }
         else {
@@ -509,7 +510,7 @@ class DatabaseRequests(private var context: Context) {
         val cursor: Int = mDb.update("normative", cv, "id=?",arrayOf<String>(normative.id.toString()))
 
         if(cursor == -1){
-            Toast.makeText(context, "Gagal mengubah dalam basis data!", Toast.LENGTH_SHORT).
+            Toast.makeText(context, "Gagal update ke database!", Toast.LENGTH_SHORT).
             show()
         }
         else {
@@ -529,7 +530,7 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectPayments(): ArrayList<Payment> {
-        val payments = ArrayList<Payment>()
+        val payments = ArrayList<Payment>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM payment", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
@@ -546,7 +547,7 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectCountersWhereUsedAndIdFlat(id_flat: Int): ArrayList<Counter> {
-        val counters = ArrayList<Counter>()
+        val counters = ArrayList<Counter>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM counter WHERE used = 'true' and id_flat = $id_flat", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
@@ -582,7 +583,7 @@ class DatabaseRequests(private var context: Context) {
 
         val l: Long = 0
         if(cursor == l){
-            Toast.makeText(context, "Gagal menambahkan pembayaran ke dalam database", Toast.LENGTH_SHORT).
+            Toast.makeText(context, "Gagal menambahkan pembayaran ke dalam database!", Toast.LENGTH_SHORT).
             show()
         }
     }
@@ -617,10 +618,10 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectNumberFlats(): ArrayList<String> {
-        val flats = ArrayList<String>()
+        val flats = ArrayList<String>();
         val cursor: Cursor = mDb.rawQuery("SELECT flat_number FROM flat", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             flats.add(cursor.getString(0))
             cursor.moveToNext()
         }
@@ -650,10 +651,10 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectCountersFromType(type: String): ArrayList<Counter> {
-        val counters = ArrayList<Counter>()
+        val counters = ArrayList<Counter>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM counter WHERE type = '$type'", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             val counter = Counter(cursor.getInt(0), cursor.getString(1),cursor.getString(2),cursor.getString(3).toBoolean(), cursor.getInt(4))
             counters.add(counter)
             cursor.moveToNext()
@@ -662,10 +663,10 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectCountersFromIdFlat(id: Int): ArrayList<Counter> {
-        val counters = ArrayList<Counter>()
+        val counters = ArrayList<Counter>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM counter WHERE id_flat = '$id'", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             val counter = Counter(cursor.getInt(0), cursor.getString(1),cursor.getString(2),cursor.getString(3).toBoolean(), cursor.getInt(4))
             counters.add(counter)
             cursor.moveToNext()
@@ -696,33 +697,23 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectPaymentsFromPeriod(period: String): ArrayList<Payment> {
-        val payments = ArrayList<Payment>()
-        val cursor: Cursor = mDb.rawQuery("SELECT * FROM payment WHERE period = '$period' AND status = 'true'", null)
+        val payments = ArrayList<Payment>();
+        val cursor: Cursor = mDb.rawQuery("SELECT * FROM payment where period = '$period' and status = 'true'", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            val payment = Payment(
-                cursor.getInt(0),
-                cursor.getString(1),
-                cursor.getFloat(2),
-                cursor.getString(3),
-                cursor.getString(4).toBoolean(),
-                cursor.getInt(5),
-                cursor.getInt(7),
-                cursor.getInt(6)
-            )
+        while (!cursor.isAfterLast()) {
+            val payment = Payment(cursor.getInt(0), cursor.getString(1),cursor.getFloat(2), cursor.getString(3), cursor.getString(4).toBoolean(), cursor.getInt(5), cursor.getInt(7), cursor.getInt(6))
             payments.add(payment)
             cursor.moveToNext()
         }
         return payments
     }
 
-
     fun selectUserFromTenant(login: String, password: String): Tenant {
         val dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val cursor = mDb.rawQuery("SELECT * FROM tenant WHERE email = '$login' and password = '$password' ", null)
         var tenant: Tenant = Tenant()
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             tenant = Tenant(cursor.getInt(0), cursor.getString(1), LocalDate.parse(cursor.getString(2), dtf), cursor.getString(3), cursor.getString(6), cursor.getString(4), cursor.getString(5))
             cursor.moveToNext()
         }
@@ -733,7 +724,7 @@ class DatabaseRequests(private var context: Context) {
         val cursor = mDb.rawQuery("SELECT * FROM Administrator WHERE email = '$login' and password = '$password' ", null)
         var admin = Admin()
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             admin = Admin(cursor.getInt(0), cursor.getString(1), cursor.getString(2))
             cursor.moveToNext()
         }
@@ -744,7 +735,7 @@ class DatabaseRequests(private var context: Context) {
         val cursor = mDb.rawQuery("SELECT * FROM Administrator WHERE id = $id ", null)
         var admin = Admin()
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             admin = Admin(cursor.getInt(0), cursor.getString(1), cursor.getString(2))
             cursor.moveToNext()
         }
@@ -777,7 +768,7 @@ class DatabaseRequests(private var context: Context) {
             ).show()
         }
         else {
-            Toast.makeText(context, "Admin berhasil diubah", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Admin berhasil diubah!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -785,7 +776,7 @@ class DatabaseRequests(private var context: Context) {
         var indications = ArrayList<Indication>()
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM indication WHERE id_counter = $id", null)
         cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
+        while (!cursor.isAfterLast()) {
             indications.add(Indication(cursor.getInt(0), cursor.getString(1),cursor.getInt(2), cursor.getInt(3)))
             cursor.moveToNext()
         }
@@ -793,7 +784,7 @@ class DatabaseRequests(private var context: Context) {
     }
 
     fun selectPaymentsFromIdFlat(id: Int): ArrayList<Payment> {
-        val payments = ArrayList<Payment>()
+        val payments = ArrayList<Payment>();
         val cursor: Cursor = mDb.rawQuery("SELECT * FROM payment WHERE id_flat = $id", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
@@ -816,11 +807,11 @@ class DatabaseRequests(private var context: Context) {
 
         val cursor: Int = mDb.update("tenant", cv, "id=?",arrayOf<String>(tenant.id_tenant.toString()))
         if(cursor == -1){
-            Toast.makeText(context, "Gagal mengubah data dalam database!", Toast.LENGTH_SHORT).
+            Toast.makeText(context, "Gagal mengubah tenant dalam database!", Toast.LENGTH_SHORT).
             show()
         }
         else {
-            Toast.makeText(context, "Data tenant berhasil diubah", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Tenant berhasil diubah", Toast.LENGTH_SHORT).show()
         }
     }
 

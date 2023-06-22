@@ -19,7 +19,7 @@ import com.example.manakos.models.Tenant;
 
 import java.util.ArrayList;
 
-public class TenantViewAdapter extends RecyclerView.Adapter<TenantViewAdapter.MyViewHolder>{
+public class TenantViewAdapter extends RecyclerView.Adapter<TenantViewAdapter.MyViewHolder> {
 
     ArrayList<Tenant> dataholder;
     private final Context context;
@@ -47,7 +47,7 @@ public class TenantViewAdapter extends RecyclerView.Adapter<TenantViewAdapter.My
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, TenantItemActivity.class);
-                intent.putExtra("id",dataholder.get(position).getId_tenant());
+                intent.putExtra("id", dataholder.get(position).getId_tenant());
                 activity.startActivity(intent);
             }
         });
@@ -58,16 +58,15 @@ public class TenantViewAdapter extends RecyclerView.Adapter<TenantViewAdapter.My
         return dataholder.size();
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView full_name, phone_number;
         int id;
         LinearLayout linearLayout;
-        public MyViewHolder(@NonNull View itemView)
-        {
+
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            full_name = (TextView)itemView.findViewById(R.id.displayFullName);
-            phone_number = (TextView)itemView.findViewById(R.id.displayPhoneNumber);
+            full_name = (TextView) itemView.findViewById(R.id.displayFullName);
+            phone_number = (TextView) itemView.findViewById(R.id.displayPhoneNumber);
             linearLayout = itemView.findViewById(R.id.linearLayout);
         }
     }

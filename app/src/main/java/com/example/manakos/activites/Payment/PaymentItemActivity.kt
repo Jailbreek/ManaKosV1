@@ -1,13 +1,18 @@
 package com.example.manakos.activites.Payment
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.manakos.activites.Indication.IndicationsActivity
 import com.example.manakos.database.DatabaseRequests
+import com.example.manakos.databinding.ActivityIndicationItemBinding
 import com.example.manakos.databinding.ActivityPaymentItemBinding
+import com.example.manakos.models.Indication
 import com.example.manakos.models.Payment
 import java.io.File
 import java.io.FileInputStream
@@ -59,9 +64,9 @@ class PaymentItemActivity : AppCompatActivity() {
         }
     }
 
-    private fun readImage(fileName: String): Bitmap?{
-        return try {
-            val dir = File("$path/Cek In/")
+    fun readImage(fileName: String): Bitmap?{
+        try {
+            val dir = File("$path/IngChecks/")
 
             val readFrom = File(dir, fileName)
             val content = ByteArray(readFrom.length().toInt())
@@ -70,9 +75,10 @@ class PaymentItemActivity : AppCompatActivity() {
             stream.read(content)
 
             val bitmap = BitmapFactory.decodeByteArray(content, 0, content.size)
-            bitmap
-        } catch (exp: Exception){
-            null
+            return bitmap
+        }
+        catch (exp: Exception){
+            return null
         }
     }
 }

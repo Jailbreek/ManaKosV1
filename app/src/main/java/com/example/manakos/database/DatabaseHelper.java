@@ -1,17 +1,18 @@
 package com.example.manakos.database;
 
-import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "ManaKos.db";
@@ -22,7 +23,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final Context mContext;
     private boolean mNeedUpdate = false;
 
-    @SuppressLint("SdCardPath")
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         if (android.os.Build.VERSION.SDK_INT >= 17)
@@ -67,7 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void copyDBFile() throws IOException {
         InputStream mInput = mContext.getAssets().open(DB_NAME);
-        OutputStream mOutput = Files.newOutputStream(Paths.get(DB_PATH + DB_NAME));
+        OutputStream mOutput = new FileOutputStream(DB_PATH + DB_NAME);
         byte[] mBuffer = new byte[1024];
         int mLength;
         while ((mLength = mInput.read(mBuffer)) > 0)
@@ -100,4 +100,3 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 }
-

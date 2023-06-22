@@ -14,13 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.manakos.R;
+import com.example.manakos.activites.Counter.CounterItemActivity;
 import com.example.manakos.activites.Indication.IndicationItemActivity;
 import com.example.manakos.database.DatabaseRequests;
+import com.example.manakos.models.Counter;
 import com.example.manakos.models.Indication;
 
 import java.util.ArrayList;
 
-public class IndicationViewAdapter extends RecyclerView.Adapter<IndicationViewAdapter.MyViewHolder>{
+public class IndicationViewAdapter extends RecyclerView.Adapter<IndicationViewAdapter.MyViewHolder> {
 
     ArrayList<Indication> dataholder;
     private final Context context;
@@ -43,8 +45,10 @@ public class IndicationViewAdapter extends RecyclerView.Adapter<IndicationViewAd
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.flat_number.setText("Nomor Kos: " + databaseRequests.selectFlatNumberFromId(databaseRequests.selectIdFlatFromCounter(dataholder.get(position).getId_counter())));
-        holder.service.setText("Counter: " + databaseRequests.selectTypeFromCounter(dataholder.get(position).getId_counter()));
+        holder.flat_number.setText("Nomor Kos: " + databaseRequests.selectFlatNumberFromId(
+                databaseRequests.selectIdFlatFromCounter(dataholder.get(position).getId_counter())));
+        holder.service.setText(
+                "Counter: " + databaseRequests.selectTypeFromCounter(dataholder.get(position).getId_counter()));
         holder.period.setText("Periode: " + dataholder.get(position).getPeriod());
         holder.value.setText("Harga: " + dataholder.get(position).getValue());
         holder.id = dataholder.get(position).getId();
@@ -52,7 +56,7 @@ public class IndicationViewAdapter extends RecyclerView.Adapter<IndicationViewAd
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, IndicationItemActivity.class);
-                intent.putExtra("id",dataholder.get(position).getId());
+                intent.putExtra("id", dataholder.get(position).getId());
                 activity.startActivity(intent);
             }
         });
@@ -63,16 +67,15 @@ public class IndicationViewAdapter extends RecyclerView.Adapter<IndicationViewAd
         return dataholder.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView flat_number, service, period, value;
         int id;
         LinearLayout linearLayout;
-        public MyViewHolder(@NonNull View itemView)
-        {
+
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            flat_number = (TextView)itemView.findViewById(R.id.displayNumberFlat);
-            service = (TextView)itemView.findViewById(R.id.displayService);
+            flat_number = (TextView) itemView.findViewById(R.id.displayNumberFlat);
+            service = (TextView) itemView.findViewById(R.id.displayService);
             period = itemView.findViewById(R.id.displayPeriod);
             value = itemView.findViewById(R.id.displayValue);
             linearLayout = itemView.findViewById(R.id.linearLayout);

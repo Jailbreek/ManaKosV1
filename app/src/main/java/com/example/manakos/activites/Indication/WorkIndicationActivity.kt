@@ -3,14 +3,26 @@ package com.example.manakos.activites.Indication
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.RequiresApi
+import com.example.manakos.R
+import com.example.manakos.activites.Counter.CounterItemActivity
+import com.example.manakos.activites.Counter.CountersActivity
 import com.example.manakos.activites.Counter.ListCountersActivity
+import com.example.manakos.activites.Flat.ListFlatsActivity
 import com.example.manakos.database.DatabaseRequests
+import com.example.manakos.databinding.ActivityWorkCounterBinding
 import com.example.manakos.databinding.ActivityWorkIndicationBinding
+import com.example.manakos.models.Counter
 import com.example.manakos.models.Indication
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class WorkIndicationActivity : AppCompatActivity() {
     lateinit var binding: ActivityWorkIndicationBinding
@@ -57,8 +69,8 @@ class WorkIndicationActivity : AppCompatActivity() {
 
         builder.setTitle("Error")
         builder.setNegativeButton(
-            "Ok",
-            DialogInterface.OnClickListener { dialog, _ ->
+            "OK",
+            DialogInterface.OnClickListener { dialog, which ->
                 dialog.dismiss()
             })
 
@@ -89,7 +101,8 @@ class WorkIndicationActivity : AppCompatActivity() {
             binding.editTextCounter.setText(databaseRequests.selectTypeFromCounter(id_counter))
 
             val date = LocalDate.now()
-            val monthNames = arrayOf("Januari, Februari, Maret, April, Mei, Juni, Juli, Agustus, September, Oktober, November, Desember")
+            val monthNames = arrayOf("Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                    "Juli", "Agustus", "September", "Oktober", "November", "Desember")
             var period = ""
             if(date.monthValue - 1 == 0) period = (monthNames[11] + " " + (date.year - 1))
             else period = (monthNames[date.monthValue - 2] + " " + (date.year))
@@ -97,11 +110,11 @@ class WorkIndicationActivity : AppCompatActivity() {
             binding.editTextPeriod.setText(period)
 
 
-            binding.textView.text = "Pengiriman"
-            binding.buttonWork.text = "Kirim"
+            binding.textView.text = "Penambahan"
+            binding.buttonWork.text = "Tambah"
         } else {
-            binding.textView.text = "Edit"
-            binding.buttonWork.text = "Ubah"
+            binding.textView.text = "Pengeditan"
+            binding.buttonWork.text = "Edit"
 
             indication = databaseRequests.selectIndicationFromId(id)
 

@@ -1,6 +1,5 @@
 package com.example.manakos.activites.Counter
 
-//noinspection SuspiciousImport
 import android.R
 import android.content.Context
 import android.content.Intent
@@ -54,15 +53,15 @@ class ListCountersActivity : AppCompatActivity() {
             val i = Intent(this, IndicationsActivity::class.java)
             startActivity(i)
         })
-        flatsAdapter = ArrayAdapter(this, R.layout.simple_list_item_1, flats)
+        flatsAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, flats)
         binding.listViewFlats.adapter = flatsAdapter
         binding.listViewFlats.setOnItemClickListener { parent, _, position, _ ->
             val selectedItem = parent.getItemAtPosition(position) as String
             binding.serchViewFlat.setQuery(selectedItem, true)
         }
-        binding.filters.visibility = View.GONE
+        binding.filters.visibility = View.GONE;
         binding.filterOpen.setOnClickListener(View.OnClickListener {
-            binding.filters.visibility = View.VISIBLE
+            binding.filters.visibility = View.VISIBLE;
         })
         binding.serchViewFlat.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -87,8 +86,8 @@ class ListCountersActivity : AppCompatActivity() {
 
     private fun resetData() {
         var values = emptyArray<String>()
-        for (i in 0 until counters.size){
-            values += ("Type: " + counters[i].type + "\nNomor Kos: " + databaseRequests.selectFlatNumberFromId(counters[i].id_flat) + ", counter: " + counters[i].number)
+        for (i in 0..counters.size - 1){
+            values += ("Tipe: " + counters[i].type + "\nNomor Kos: " + databaseRequests.selectFlatNumberFromId(counters[i].id_flat) + ", penghitung: " + counters[i].number)
         }
         adapter = ArrayAdapter(this@ListCountersActivity, R.layout.simple_list_item_single_choice, values)
         binding.filters.visibility = View.GONE
@@ -99,7 +98,7 @@ class ListCountersActivity : AppCompatActivity() {
 
     private fun filterData() {
         var id_flat = ""
-        val type = types[types.indexOfFirst {  it == (binding.spinnerType.selectedItem)}]
+        val type = types[types.indexOfFirst {  it.equals(binding.spinnerType.selectedItem)}]
         var newCounters = ArrayList<Counter>()
         for(counter: Counter in counters)
         {
@@ -111,8 +110,8 @@ class ListCountersActivity : AppCompatActivity() {
             newCounters = newCounters.filter {  it.id_flat == (id_flat.toInt())  } as ArrayList<Counter>
         }
         var values = emptyArray<String>()
-        for (i in 0 until newCounters.size){
-            values += ("Type: " + newCounters[i].type + "\nNomor Kos: " + databaseRequests.selectFlatNumberFromId(newCounters[i].id_flat) + ", counter: " + newCounters[i].number)
+        for (i in 0..newCounters.size - 1){
+            values += ("Tipe: " + newCounters[i].type + "\nNomor Kos: " + databaseRequests.selectFlatNumberFromId(newCounters[i].id_flat) + ", penghitung: " + newCounters[i].number)
         }
         adapter = ArrayAdapter(this@ListCountersActivity, R.layout.simple_list_item_single_choice, values)
         binding.listCounters.adapter = adapter
@@ -134,8 +133,8 @@ class ListCountersActivity : AppCompatActivity() {
             }
         }
         var values = emptyArray<String>()
-        for (i in 0 until counters.size){
-            values += ("Type: " + counters[i].type + "\nNomor Kos: " + databaseRequests.selectFlatNumberFromId(counters[i].id_flat) + ", counter: " + counters[i].number)
+        for (i in 0..counters.size - 1){
+            values += ("Tipe: " + counters[i].type + "\nNomor Kos: " + databaseRequests.selectFlatNumberFromId(counters[i].id_flat) + ", penghitung: " + counters[i].number)
         }
 
         adapter = ArrayAdapter(this@ListCountersActivity, R.layout.simple_list_item_single_choice, values)

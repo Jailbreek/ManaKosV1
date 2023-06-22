@@ -8,9 +8,15 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
+import com.example.manakos.activites.Counter.CountersActivity
+import com.example.manakos.activites.Counter.WorkCounterActivity
 import com.example.manakos.database.DatabaseRequests
+import com.example.manakos.databinding.ActivityCounterItemBinding
 import com.example.manakos.databinding.ActivityIndicationItemBinding
+import com.example.manakos.databinding.ActivityIndicationsBinding
+import com.example.manakos.models.Counter
 import com.example.manakos.models.Indication
 
 class IndicationItemActivity : AppCompatActivity() {
@@ -59,13 +65,13 @@ class IndicationItemActivity : AppCompatActivity() {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
             builder.setTitle("Hapus Indikasi")
-            builder.setMessage("Apakah Anda yakin ingin menghapus Indikasi ini?")
+            builder.setMessage("Apakah anda yakin ingin menghapus indikasi ini?")
 
             builder.setPositiveButton(
                 "Ya",
-                DialogInterface.OnClickListener { dialog, _ ->
+                DialogInterface.OnClickListener { dialog, which ->
                     val cursor = databaseRequests.deleteIndication(indication.id)
-                    if (cursor == -1)  Toast.makeText(this@IndicationItemActivity, "Kesalahan penghapusan di database!", Toast.LENGTH_SHORT).show()
+                    if (cursor == -1)  Toast.makeText(this@IndicationItemActivity, "Terjadi Kesalahan saat penghapusan!", Toast.LENGTH_SHORT).show()
                     else {
                         Toast.makeText(this@IndicationItemActivity, "Indikasi dihapus", Toast.LENGTH_SHORT).show()
                         val i = Intent(this, IndicationsActivity::class.java)
@@ -76,7 +82,7 @@ class IndicationItemActivity : AppCompatActivity() {
 
             builder.setNegativeButton(
                 "Tidak",
-                DialogInterface.OnClickListener { dialog, _ ->
+                DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
                 })
 
@@ -84,12 +90,12 @@ class IndicationItemActivity : AppCompatActivity() {
         }
         else
         {
-//            Toast.makeText(this@IndicationItemActivity, "Penghapusan tidak dapat dilakukan karena pencatatan transaksi untuk periode ini telah dilakukan!", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@IndicationItemActivity, "Penghapusan tidak dapat dilakukan karena pencatatan transaksi untuk periode ini telah dibuat!", Toast.LENGTH_SHORT).show()
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setTitle("Error")
             builder.setNegativeButton(
-                "Ok",
-                DialogInterface.OnClickListener { dialog, _ ->
+                "OK",
+                DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
                 })
             builder.setMessage("Penghapusan tidak dapat dilakukan karena pencatatan transaksi untuk periode ini telah dibuat!")
@@ -106,8 +112,8 @@ class IndicationItemActivity : AppCompatActivity() {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setTitle("Error")
             builder.setNegativeButton(
-                "Ok",
-                DialogInterface.OnClickListener { dialog, _ ->
+                "OK",
+                DialogInterface.OnClickListener { dialog, which ->
                     dialog.dismiss()
                 })
             builder.setMessage("Perubahan tidak dapat dilakukan karena pencatatan transaksi telah dibuat untuk periode ini.")

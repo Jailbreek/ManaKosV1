@@ -23,7 +23,7 @@ class WorkAccountActivity : AppCompatActivity() {
     var id: Int = 0
     var role = ""
     var tenant = Tenant()
-    private var admin = Admin()
+    var admin = Admin()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWorkAccountBinding.inflate(layoutInflater)
@@ -44,7 +44,7 @@ class WorkAccountActivity : AppCompatActivity() {
         binding.check.setOnClickListener(View.OnClickListener{
             binding.editTextPassword.isEnabled = binding.check.isChecked
             binding.editTextRePassword.isEnabled = binding.check.isChecked
-            if(!binding.check.isChecked){
+            if(binding.check.isChecked == false){
                 binding.forPassword.visibility = View.GONE
             } else {
                 binding.forPassword.visibility = View.VISIBLE
@@ -86,7 +86,7 @@ class WorkAccountActivity : AppCompatActivity() {
         var error = ""
 
         if(login.isNotEmpty() && !isEmailValid(login)) error = "email"
-        if(binding.check.isChecked) {
+        if(binding.check.isChecked == true) {
             if(password.length < 10) error = "password"
             if(password != repassword) error = "repassword"
         }
@@ -105,8 +105,8 @@ class WorkAccountActivity : AppCompatActivity() {
 
         builder.setTitle("Error")
         builder.setNegativeButton(
-            "Оk",
-            DialogInterface.OnClickListener { dialog, _ ->
+            "OK",
+            DialogInterface.OnClickListener { dialog, which ->
                 dialog.dismiss()
             })
 
@@ -114,11 +114,11 @@ class WorkAccountActivity : AppCompatActivity() {
         {
             if(role == "tenant" || intent.getIntExtra("id", 0) != 0){
                 tenant.email = login
-                if(binding.check.isChecked) tenant.password = EncryptPass.SHA1(password)
+                if(binding.check.isChecked == true) tenant.password = EncryptPass.SHA1(password)
                 databaseRequests.updateTenantUser(tenant)
             } else {
                 admin.email = login
-                if(binding.check.isChecked) admin.password = EncryptPass.SHA1(password)
+                if(binding.check.isChecked == true) admin.password = EncryptPass.SHA1(password)
                 databaseRequests.updateAdmin(admin)
             }
             back()
@@ -138,7 +138,7 @@ class WorkAccountActivity : AppCompatActivity() {
         }
     }
 
-    private fun isEmailValid(email: String): Boolean {
+    fun isEmailValid(email: String): Boolean {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email)
             .matches()
     }
