@@ -1,0 +1,2 @@
+administrator => admin@gmail.com, admin12345
+tenant => andrew@gmail.com, 1234567890
